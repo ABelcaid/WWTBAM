@@ -12,10 +12,23 @@ const Round = new Schema(
         type: mongoose.Schema.Types.ObjectId,
         ref: 'Question'
     },
-    id_question_token: {
-      type: mongoose.Schema.Types.ObjectId,
-      ref: 'QuestionToken'
-  },
+    id_participant: {
+        type: mongoose.Schema.Types.ObjectId,
+        ref : 'Participant'
+      },
+      participant_answer: {
+        type: String,
+       
+      },
+      score : {
+        type: Number,
+        default: 0,
+    }
+
+  
+  
+    
+
     
   },
   {

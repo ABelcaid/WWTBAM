@@ -7,7 +7,7 @@ const auth = require('../middleware/auth')
 
 router.post('/newGroup',  auth , groupController.newGroup);
 
-
+router.put('/joinGroup/:codeGroup',groupController.joinGroup);
 
 
 module.exports = router;

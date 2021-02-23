@@ -5,13 +5,17 @@ const Schema = mongoose.Schema;
 
 const GroupMembrs = new Schema(
   {
-    id_participant: {
+    id_participant:[{
       type: mongoose.Schema.Types.ObjectId,
       ref : 'Participant'
-    },
-    grope_code: {
+    }],
+    group_code: {
       type: String,
       required: true,
+    },
+    used : {
+      type : Boolean,
+      default : false
     }
   },
   {

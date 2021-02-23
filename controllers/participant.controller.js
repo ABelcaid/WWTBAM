@@ -4,6 +4,9 @@ const Participant = require('../models/participant.model');
 require('dotenv').config()
 const Nexmo = require('nexmo');
 
+
+
+
 const register = (req, res) => {
 
     bcrypt.hash(req.body.password, 10, function (err, hashPassword) {

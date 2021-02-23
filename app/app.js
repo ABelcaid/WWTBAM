@@ -21,10 +21,15 @@ app.use(bodyParser.json())
 
 const adminRoutes = require("../routes/admin");
 const participantRoutes = require("../routes/participant")
+const groupMembersRoutes = require("../routes/group_members")
+const questionRoutes = require("../routes/question")
+const roundRoutes = require("../routes/round")
 
 app.use('/admin', adminRoutes);
 app.use('/participant', participantRoutes);
-
+app.use('/group', groupMembersRoutes);
+app.use('/question', questionRoutes);
+app.use('/round', roundRoutes);
 
 
 
