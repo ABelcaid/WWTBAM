@@ -34,6 +34,17 @@ const addQuestion = (req, res) => {
 
 const getRandomQuestion = (req , res)=>{
 
+  Question.find()
+  .then(question => {
+    let randomQuestion = question[Math.floor(Math.random() * question.length)];
+      res.send(randomQuestion);
+  }).catch(err => {
+      res.status(500).send({
+          message: err.message || "Some error occurred while retrieving question."
+      });
+  });
+
+
 }
 
 
