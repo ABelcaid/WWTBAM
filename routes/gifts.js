@@ -8,7 +8,7 @@ const auth = require('../middleware/auth')
 
 router.post('/addGift',auth , giftsController.addGifts);
 
-router.get('/getGift', giftsController.getRandomGift);
+
 
 
 module.exports = router;

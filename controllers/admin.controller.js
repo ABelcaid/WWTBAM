@@ -88,8 +88,15 @@ const loginAdmin = (req, res) => {
 }
 
 
+const getAllAdmins = (req , res) => {
+        Admin.find()
+        .then((admin) => res.json(admin))
+        .catch((err) => res.status(400).json("Error :" + err));
+}
+
+
 
 
 module.exports = {
-        addAdmin ,loginAdmin
+        addAdmin ,loginAdmin,getAllAdmins
 };

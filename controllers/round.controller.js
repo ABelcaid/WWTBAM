@@ -10,7 +10,7 @@ const Question = require('../models/question.model');
 
         // check if we have the group and we have  4 players 
 
-        let id_group = req.params.id_group;
+        let id_group = req.params.idGroup;
 
         await GroupMembers.findById(id_group)
                 .then(group => {
@@ -26,11 +26,13 @@ const Question = require('../models/question.model');
                         }
 
 
-                        let id_group_members = req.body.id_group_members;
+                        let id_group_members = id_group;
                         let id_question = req.body.id_question;
                         let id_participant = req.body.id_participant;
                         let participant_answer = req.body.participant_answer;
-                        let score = checkParticipantScore();
+                        let score = checkParticipantScore(id_group,id_participant);
+
+                        console.log(score);
 
                         // check if the answer is correct then update score 
                         if (checkAnswer(participant_answer, id_question)) {
@@ -95,10 +97,12 @@ async function checkAnswer(participant_answer, id_question) {
 }
 
 
+
 // check if the paticipant has a score 
 
 async function checkParticipantScore(id_group_members,id_participant) {
-        await Round.findOne({id_group_members : id_group_members,id_participant : id_participant},function(err,round) { return round.score })
+        await Round.findOne({id_group_members : id_group_members,id_participant : id_participant},function(err,round) { 
+                return round.score })
        
 
 

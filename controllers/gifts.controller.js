@@ -31,22 +31,9 @@ const addGifts = (req, res) => {
 
 }
 
-const getRandomGift = (req , res)=>{
 
-    Gifts.find()
-  .then(gift => {
-    let randomGift = gift[Math.floor(Math.random() * gift.length)];
-      res.send(randomGift);
-  }).catch(err => {
-      res.status(500).send({
-          message: err.message || "Some error occurred while retrieving Gift."
-      });
-  });
-
-
-}
 
 
 module.exports = {
-    addGifts,getRandomGift
+    addGifts
 }

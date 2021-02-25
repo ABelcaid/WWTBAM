@@ -129,7 +129,14 @@ const validate = (req , res)=>{
 }
 
 
+const allParticipant = (req , res ) =>{
+        Participant.find()
+        .then((participant) => res.json(participant))
+        .catch((err) => res.status(400).json("Error :" + err));
+}
+
+
 
 module.exports = {
-        register ,login ,validate
+        register ,login ,validate,allParticipant
 };

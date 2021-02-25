@@ -5,7 +5,7 @@ const roundController = require('../controllers/round.controller')
 
 
 
-router.post('/createRound', roundController.createRound);
+router.post('/createRound/:idGroup', roundController.createRound);
 
 
 

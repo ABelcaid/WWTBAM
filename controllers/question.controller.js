@@ -48,6 +48,12 @@ const getRandomQuestion = (req , res)=>{
 }
 
 
+const getAllQuestion = (req , res) => {
+  Question.find()
+  .then((question) => res.json(question))
+  .catch((err) => res.status(400).json("Error :" + err));
+}
+
 module.exports = {
-  addQuestion,getRandomQuestion
+  addQuestion,getRandomQuestion,getAllQuestion
 }
