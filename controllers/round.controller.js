@@ -6,7 +6,7 @@ const Question = require('../models/question.model');
 
 
 
- const createRound = async (req, res) => {
+const createRound = async (req, res) => {
 
         // check if we have the group and we have  4 players 
 
@@ -26,39 +26,45 @@ const Question = require('../models/question.model');
                         }
 
 
+
+
                         let id_group_members = id_group;
                         let id_question = req.body.id_question;
                         let id_participant = req.body.id_participant;
                         let participant_answer = req.body.participant_answer;
-                        let score = checkParticipantScore(id_group,id_participant);
+                        // let score = checkParticipantScore(id_group,id_participant);
+                        (async () => {
+                                let score = await checkParticipantScore(id_group, id_participant);
 
-                        console.log(score);
+                                console.log(score)
 
-                        // check if the answer is correct then update score 
-                        if (checkAnswer(participant_answer, id_question)) {
-                                score = 10;
+                                // console.log(score);
 
-                        }
+                                // check if the answer is correct then update score 
+                                if (checkAnswer(participant_answer, id_question)) {
+                                        score = score + 10;
 
-                        const RoundPush = new Round({
+                                }
 
-                                id_group_members: id_group_members,
-                                id_question: id_question,
-                                id_participant: id_participant,
-                                participant_answer: participant_answer,
-                                score: score,
+                                const RoundPush = new Round({
+
+                                        id_group_members: id_group_members,
+                                        id_question: id_question,
+                                        id_participant: id_participant,
+                                        participant_answer: participant_answer,
+                                        score: score,
 
 
-                        });
+                                });
 
-                        RoundPush
-                                .save()
-                                .then((data) => {
-                                        res.send(data);
-                                        res.json("Round  successfully saved")
+                                RoundPush
+                                        .save()
+                                        .then((data) => {
+                                                res.send(data);
+                                                res.json("Round  successfully saved")
 
-                                }).catch((err) => res.status(400).json("Error :" + err));
-
+                                        }).catch((err) => res.status(400).json("Error :" + err));
+                        })()
                 }).catch(err => {
 
                         return res.status(500).send({
@@ -100,13 +106,17 @@ async function checkAnswer(participant_answer, id_question) {
 
 // check if the paticipant has a score 
 
-async function checkParticipantScore(id_group_members,id_participant) {
-        await Round.findOne({id_group_members : id_group_members,id_participant : id_participant},function(err,round) { 
-                return round.score })
-       
+async function checkParticipantScore(id_group_members, id_participant) {
+        round = await Round.findOne({
+                id_group_members: id_group_members,
+                id_participant: id_participant
+        })
+
+        return round.score
 
 
-        
+
+
 }
 
 

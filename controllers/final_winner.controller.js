@@ -12,28 +12,38 @@ const addFinalWinner = (req, res) => {
     if (err) {
       res.sendStatus(403);
     } else {
-        let id_group_members = req.body.id_group_members;
-        let round = getHighScore(req.body.id_group_members);
-        let final_sccore = Math.max(...round.score);
+
+      let id_group_members = req.params.idGroup;
+
+      (async () => {
+        let round = await  getHighScore(id_group_members);
+        let final_sccore = Math.max.apply(Math, round.map(function(round) { return round.score; }))
+
+        let finalWinner = await winner(id_group_members, final_sccore);
+
+        let gift = await getRandomGift()
 
 
-      const FinalWinnerPush = new FinalWinner({
 
-        id_group_members:id_group_members,
-        final_sccore: final_sccore,
-        id_participant: winner(id_group_members,final_sccore),
-        gift: getRandomGift(),
-    
-      });
+        const FinalWinnerPush = new FinalWinner({
 
-      FinalWinnerPush
-        .save()
-        .then((data) => {
-          res.send(data);
-          res.json("FinalWinner successfully added")
+          id_group_members: id_group_members,
+          final_sccore: final_sccore,
+          id_participant: finalWinner,
+          gift: gift,
 
-        }).catch((err) => res.status(400).json("Error :" + err));
+        });
 
+        FinalWinnerPush
+          .save()
+          .then((data) => {
+            res.send(data);
+            res.json("FinalWinner successfully added")
+
+          }).catch((err) => res.status(400).json("Error :" + err));
+
+
+      })()
     }
   });
 
@@ -42,40 +52,37 @@ const addFinalWinner = (req, res) => {
 
 
 async function getRandomGift() {
-    await Gifts.find()
-    .then(gift => {
-      let randomGift = gift[Math.floor(Math.random() * gift.length)];
-        return randomGift._id;
-    }).catch(err => {
-      return null;
-    });
-  
-    
-}  
 
-async function getHighScore(id_group_members) {
-    await Round.findOne({id_group_members : id_group_members})
-    .then(round => {
-
-    return round ;
-    }).catch(err => {
-      return null;
-    });
-  
-    
-} 
-
-async function winner(id_group_members,final_sccore){
-    await Round.findOne({id_group_members : id_group_members , score : final_sccore})
-    .then(round => {
-
-    return round.id_participant;
-    }).catch(err => {
-      return null;
-    });
-}
+   gift =  await Gifts.find()
+   let randomGift = gift[Math.floor(Math.random() * gift.length)];
+   return randomGift._id;
 
  
+
+
+}
+
+async function getHighScore(id_group_members) {
+  round = await Round.find({
+    id_group_members: id_group_members
+  })
+
+  return round;
+
+
+
+}
+
+async function winner(id_group_members, final_sccore) {
+  round = await Round.findOne({
+      id_group_members: id_group_members,
+      score: final_sccore
+    })
+
+    return round.id_participant;
+}
+
+
 module.exports = {
-    addFinalWinner,
+  addFinalWinner,
 }

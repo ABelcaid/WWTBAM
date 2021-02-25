@@ -25,6 +25,7 @@ const groupMembersRoutes = require("../routes/group_members")
 const questionRoutes = require("../routes/question")
 const roundRoutes = require("../routes/round")
 const giftsRoutes = require("../routes/gifts")
+const winnerRoutes = require("../routes/final_winner")
 
 app.use('/admin', adminRoutes);
 app.use('/participant', participantRoutes);
@@ -32,6 +33,8 @@ app.use('/group', groupMembersRoutes);
 app.use('/question', questionRoutes);
 app.use('/round', roundRoutes);
 app.use('/gifts', giftsRoutes);
+app.use('/winner', winnerRoutes);
+
 
 
 
