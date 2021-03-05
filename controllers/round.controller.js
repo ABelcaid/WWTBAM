@@ -107,12 +107,31 @@ async function checkAnswer(participant_answer, id_question) {
 // check if the paticipant has a score 
 
 async function checkParticipantScore(id_group_members, id_participant) {
-        round = await Round.findOne({
+        let scoreArray = [];
+        round = await Round.find({
                 id_group_members: id_group_members,
                 id_participant: id_participant
         })
 
-        return round.score
+        if (round) {
+
+                for (let i = 0; i < round.length; i++) {
+
+                       scoreArray.push(round[i].score)
+                        
+                }
+
+               
+
+                return Math.max(...scoreArray)
+                
+        } else {
+                return 0
+                
+        }
+        
+
+        
 
 
 

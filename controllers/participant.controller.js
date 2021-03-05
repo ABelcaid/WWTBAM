@@ -60,8 +60,13 @@ const login = (req, res) => {
 
                                         }
                                         if (result) {
+                                               
                                                 let token = jwt.sign( {phone: phone }, 'belcaidKey', (err, token) => {
-                                                        res.json({ token: token})
+                                                        res.json({ token: token,
+                                                                id :participant._id,
+                                                                name : participant.full_name
+                                                        
+                                                        })
                                                 })
 
                                 
@@ -106,7 +111,7 @@ const validate = (req , res)=>{
                 apiSecret: process.env.APISECRET,
                 });
 
-                const from = 'Vonage APIs';
+                const from = 'WWTBAM';
                 const to = '212622157035';
                 const text = 'congratulations your account has been activated';
 
@@ -130,7 +135,7 @@ const validate = (req , res)=>{
 
 
 const allParticipant = (req , res ) =>{
-        Participant.find()
+        Participant.find({ is_valid: false})
         .then((participant) => res.json(participant))
         .catch((err) => res.status(400).json("Error :" + err));
 }
