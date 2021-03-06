@@ -41,10 +41,17 @@ const createRound = async (req, res) => {
                                 // console.log(score);
 
                                 // check if the answer is correct then update score 
-                                if (checkAnswer(participant_answer, id_question)) {
+                                let a = await checkAnswer(participant_answer, id_question)
+
+                                if (a == true) {
                                         score = score + 10;
+                                        console.log(score);
 
                                 }
+
+console.log(a);
+                            
+
 
                                 const RoundPush = new Round({
 
@@ -79,26 +86,36 @@ const createRound = async (req, res) => {
 
 async function checkAnswer(participant_answer, id_question) {
 
-        await Question.findById(id_question)
-                .then(question => {
-                        if (!question) {
-                                return "question not found with id " + id_question
-                        }
-                        res.send(question);
+        // await Question.findById(id_question)
+        //         .then(question => {
+        //                 if (!question) {
+        //                         return "question not found with id " + id_question
+        //                 }
+        //                 res.send(question);
 
-                        if (question.answer == participant_answer) {
+        //                 if (question.answer == participant_answer) {
 
-                                return true;
+        //                         return true;
 
-                        }
-                }).catch(err => {
-                        if (err.kind === 'ObjectId') {
-                                return "question not found with id " + id_question
-                        }
-                        return "Error retrieving question with id " + id_question
-                });
+        //                 }
+        //         }).catch(err => {
+        //                 if (err.kind === 'ObjectId') {
+        //                         return "question not found with id " + id_question
+        //                 }
+        //                 return "Error retrieving question with id " + id_question
+        //         });
 
 
+
+        question = await Question.findById(id_question)
+        if (question.answer == participant_answer) {
+
+                
+                return true
+                
+        }else{
+                return false
+        }
 
 }
 
@@ -107,7 +124,7 @@ async function checkAnswer(participant_answer, id_question) {
 // check if the paticipant has a score 
 
 async function checkParticipantScore(id_group_members, id_participant) {
-        let scoreArray = [];
+        let scoreArray = [0];
         round = await Round.find({
                 id_group_members: id_group_members,
                 id_participant: id_participant
