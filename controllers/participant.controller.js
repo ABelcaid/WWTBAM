@@ -140,8 +140,30 @@ const allParticipant = (req , res ) =>{
         .catch((err) => res.status(400).json("Error :" + err));
 }
 
+const gerFinalWinner = async (req, res) => {
+
+
+        let idWinner = req.params.idWinner;
+      
+        await Participant.findById(idWinner)
+                .then(winner => {
+                        if (!winner) {
+                                res.json({ error: 'winner not found' });
+                        }
+                      
+                        res.send(winner)
+                }).catch(err => {
+      
+                        return res.status(500).send({
+                                message: "Error retrieving winner " 
+                        });
+                });
+      
+      
+      
+      }
 
 
 module.exports = {
-        register ,login ,validate,allParticipant
+        register ,login ,validate,allParticipant,gerFinalWinner
 };

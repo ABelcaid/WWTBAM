@@ -15,14 +15,11 @@ const createRound = async (req, res) => {
         await GroupMembers.findById(id_group)
                 .then(group => {
                         if (!group) {
-                                return res.status(404).send({
-                                        message: "group not found with id " + id_group
-                                });
+                                res.json({ error: 'gtoup not found' });
                         }
                         if (group.id_participant.length < 3) {
-                                return res.send({
-                                        message: "Ops you need 4 players to start the game  !"
-                                });
+                                res.json({ error: ' you need 4 players ... ' });
+                             
                         }
 
 
@@ -49,7 +46,7 @@ const createRound = async (req, res) => {
 
                                 }
 
-console.log(a);
+                        console.log(a);
                             
 
 
@@ -82,6 +79,36 @@ console.log(a);
 
 
 }
+
+
+
+const checkParticipantNumber = async (req, res) => {
+
+
+        let id_group = req.params.idGroup;
+
+        await GroupMembers.findById(id_group)
+                .then(group => {
+                        if (!group) {
+                                res.json({ error: 'gtoup not found' });
+                        }
+                        if (group.id_participant.length < 3) {
+                                res.json({ error: ' you need 4 players to start ... ' });
+                             
+                        }
+                        res.send(group)
+                }).catch(err => {
+
+                        return res.status(500).send({
+                                message: "Error retrieving group with id " + id_group
+                        });
+                });
+
+
+
+}
+
+
 
 
 async function checkAnswer(participant_answer, id_question) {
@@ -157,6 +184,7 @@ async function checkParticipantScore(id_group_members, id_participant) {
 
 
 
+
 module.exports = {
-        createRound
+        createRound,checkParticipantNumber
 };

@@ -1,4 +1,3 @@
-const jwt = require('jsonwebtoken');
 const FinalWinner = require('../models/final_winner.model');
 const Gifts = require('../models/gifts.model');
 const Round = require('../models/round.model');
@@ -8,46 +7,57 @@ const Round = require('../models/round.model');
 
 const addFinalWinner = (req, res) => {
 
-  jwt.verify(req.token, 'belcaidKey', (err, authData) => {
-    if (err) {
-      res.sendStatus(403);
-    } else {
+  let id_group_members = req.params.idGroup;
 
-      let id_group_members = req.params.idGroup;
+  (async () => {
+    let round = await  getHighScore(id_group_members);
+    let final_sccore = Math.max.apply(Math, round.map(function(round) { return round.score; }))
 
-      (async () => {
-        let round = await  getHighScore(id_group_members);
-        let final_sccore = Math.max.apply(Math, round.map(function(round) { return round.score; }))
+    let finalWinner = await winner(id_group_members, final_sccore);
 
-        let finalWinner = await winner(id_group_members, final_sccore);
-
-        let gift = await getRandomGift()
+    let gift = await getRandomGift()
 
 
 
-        const FinalWinnerPush = new FinalWinner({
+    const FinalWinnerPush = new FinalWinner({
 
-          id_group_members: id_group_members,
-          final_sccore: final_sccore,
-          id_participant: finalWinner,
-          gift: gift,
+      id_group_members: id_group_members,
+      final_sccore: final_sccore,
+      id_participant: finalWinner,
+      gift: gift,
 
-        });
+    });
 
-        FinalWinnerPush
-          .save()
-          .then((data) => {
-            res.send(data);
-            res.json("FinalWinner successfully added")
+    FinalWinnerPush
+      .save()
+      .then((data) => {
+        res.send(data);
+        res.json("FinalWinner successfully added")
 
-          }).catch((err) => res.status(400).json("Error :" + err));
+      }).catch((err) => res.status(400).json("Error :" + err));
 
 
-      })()
-    }
-  });
+  })()
+
+
 
 }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
@@ -84,5 +94,5 @@ async function winner(id_group_members, final_sccore) {
 
 
 module.exports = {
-  addFinalWinner,
+  addFinalWinner
 }

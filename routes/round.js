@@ -7,6 +7,8 @@ const roundController = require('../controllers/round.controller')
 
 router.post('/createRound/:idGroup', roundController.createRound);
 
+router.get('/createRound/:idGroup', roundController.checkParticipantNumber);
+
 
 
 
