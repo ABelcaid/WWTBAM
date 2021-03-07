@@ -31,9 +31,31 @@ const addGifts = (req, res) => {
 
 }
 
+const  getGift = (req,res) =>{
+
+     Gifts.findById(req.params.giftId)
+  .then(gift => {
+    if (!gift) {
+            res.json({ error: 'gift not found' });
+    }
+  
+    res.send(gift)
+}).catch(err => {
+
+    return res.status(500).send({
+            message: "Error retrieving gift " 
+    });
+});
+
+
+
+
+
+}
+
 
 
 
 module.exports = {
-    addGifts
+    addGifts,getGift
 }
